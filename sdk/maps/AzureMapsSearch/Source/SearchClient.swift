@@ -77,4 +77,22 @@ public class SearchClient {
     ) {
         self.service.reverseSearchAddress(format: .json, query: query, withOptions: options, completionHandler: completionHandler)
     }
+
+    /// **Nearby Search**
+    /// **Applies to**: S0 and S1 pricing tiers.
+    /// If you have a use case for only retrieving POI results around a specific location, the nearby search method may be the right choice. This endpoint will only return POI results, and does not take in a search query parameter.
+    /// - Parameters:
+    ///    - lat : Latitude where results should be biased. E.g. 37.337.
+    ///    - lon : Longitude where results should be biased. E.g. -121.89.
+    ///    - options: A list of options for the operation
+    ///    - completionHandler: A completion handler that receives a status code on
+    ///     success.
+    public func searchNearbyPointOfInterest(
+        lat: Double,
+        lon: Double,
+        withOptions options: SearchNearbyPointOfInterestOptions? = nil,
+        completionHandler: @escaping HTTPResultHandler<SearchAddressResult>
+    ) {
+        self.service.searchNearbyPointOfInterest(format: .json, lat: lat, lon: lon, withOptions: options, completionHandler: completionHandler)
+    }
 }
