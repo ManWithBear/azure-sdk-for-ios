@@ -27,23 +27,31 @@
 
 import XCTest
 import Foundation
-@testable import AzureMapsRoute
+import AzureMapsGeolocation
 
-final class AzureMapsRouteTests: XCTestCase {
-    func testGetLocation(){        
-        let client = try! RouteClient.init(credential: SharedTokenCredential(""), withOptions: RouteClientOptions())
-        let expectation = expectation(description: "get route directions should return")
-        client.getRouteDirections(routePoints: "52.50931,13.42936:52.50274,13.43872") { result, response in
+final class AzureMapsGeolocationTests: XCTestCase {
+    func test_getLocation_shouldReturnCorrectCountryRegionISOCode() {
+        let sut = makeSUT()
+        let expectation = expectation(description: "getLocation should return")
+
+        sut.getLocation(ipAddress: "140.113.0.0") { result, _ in
             switch result {
             case .failure(let error):
                 XCTFail(error.message)
             case .success(let result):
-                XCTAssertNotNil(result.routes?.first?.summary?.lengthInMeters)
+                XCTAssertEqual(result.countryRegion?.isoCode, "TW")
             }
-            
+    
             expectation.fulfill()
         }
         
         waitForExpectations(timeout: 10, handler: nil)
+    }
+
+    // MARK: - Helpers
+
+    func makeSUT() -> GeolocationClient {
+        // FIXME: replace with env variables
+        GeolocationClient(credential: SharedTokenCredential("PUT_YOUR_SUBSCRIPTION_KEY_HERE"))
     }
 }
